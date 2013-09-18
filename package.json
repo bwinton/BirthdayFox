@@ -1,0 +1,76 @@
+{
+  "preferences": [
+    {
+      "name": "urlbar",
+      "title": "Urlbar placeholder",
+      "description": "Add whimsical sayings before you type in a url.",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "ponami",
+      "title": "Ponami code in About Firefox",
+      "description": "↑ ↑ ↓ ↓ ← → ← → b a",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "hamburglar",
+      "title": "The Hamburglar!",
+      "description": "The Hamburglar™ steals your menu button.",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "newtabicons2",
+      "title": "Newtab icons",
+      "description": "Add better icons for the new tab page.",
+      "type": "menulist",
+      "value": 2,
+      "options": [
+        {
+          "value": "0",
+          "label": "Off"
+        },
+        {
+          "value": "1",
+          "label": "Hover to Show"
+        },
+        {
+          "value": "2",
+          "label": "Always On"
+        }
+      ]
+    },
+    {
+      "name": "searchbar",
+      "title": "Search Privacy",
+      "description": "Clear the search bar when you switch tabs.",
+      "type": "bool",
+      "value": true
+    },
+    {
+      "name": "register",
+      "title": "Register",
+      "description": "Register your copy of WhimsyPro today!",
+      "type": "string",
+      "value": false
+    }
+  ],
+  "permissions": {
+    "private-browsing": true
+  },
+  "name": "whimsy",
+  "license": "MPL 2.0",
+  "author": "Blake Winton <bwinton@mozilla.com>",
+  "icon": "data/whimsycorn-48.png",
+  "icon64": "data/whimsycorn-64.png",
+  "bugs": {},
+  "amd": {},
+  "repository": {},
+  "version": "0.15",
+  "contributors": [],
+  "fullName": "Whimsy Pro",
+  "id": "jid1-6mUPixNFCjAgkg",
+  "description": "Add some Whimsy to your Firefox!  (Pro Version, unregistered)"
+}
