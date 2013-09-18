@@ -8,20 +8,6 @@
       "value": true
     },
     {
-      "name": "ponami",
-      "title": "Ponami code in About Firefox",
-      "description": "↑ ↑ ↓ ↓ ← → ← → b a",
-      "type": "bool",
-      "value": true
-    },
-    {
-      "name": "hamburglar",
-      "title": "The Hamburglar!",
-      "description": "The Hamburglar™ steals your menu button.",
-      "type": "bool",
-      "value": true
-    },
-    {
       "name": "newtabicons2",
       "title": "Newtab icons",
       "description": "Add better icons for the new tab page.",
@@ -41,26 +27,12 @@
           "label": "Always On"
         }
       ]
-    },
-    {
-      "name": "searchbar",
-      "title": "Search Privacy",
-      "description": "Clear the search bar when you switch tabs.",
-      "type": "bool",
-      "value": true
-    },
-    {
-      "name": "register",
-      "title": "Register",
-      "description": "Register your copy of WhimsyPro today!",
-      "type": "string",
-      "value": false
     }
   ],
   "permissions": {
     "private-browsing": true
   },
-  "name": "whimsy",
+  "name": "BirthdayFox",
   "license": "MPL 2.0",
   "author": "Blake Winton <bwinton@mozilla.com>",
   "icon": "data/whimsycorn-48.png",
@@ -68,9 +40,9 @@
   "bugs": {},
   "amd": {},
   "repository": {},
-  "version": "0.15",
+  "version": "0.9",
   "contributors": [],
-  "fullName": "Whimsy Pro",
+  "fullName": "BirthdayFox",
   "id": "jid1-6mUPixNFCjAgkg",
-  "description": "Add some Whimsy to your Firefox!  (Pro Version, unregistered)"
+  "description": "An add-on to celebrate Firefox's birthday!"
 }
