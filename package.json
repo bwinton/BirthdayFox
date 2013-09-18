@@ -32,7 +32,7 @@
   "permissions": {
     "private-browsing": true
   },
-  "name": "BirthdayFox",
+  "name": "birthdayfox",
   "license": "MPL 2.0",
   "author": "Blake Winton <bwinton@mozilla.com>",
   "icon": "data/whimsycorn-48.png",
@@ -43,6 +43,6 @@
   "version": "0.9",
   "contributors": [],
   "fullName": "BirthdayFox",
-  "id": "jid1-6mUPixNFCjAgkg",
+  "id": "birthdayfox",
   "description": "An add-on to celebrate Firefox's birthday!"
 }
