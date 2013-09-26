@@ -13,16 +13,44 @@
 "use strict";
 
 function mouseOverListener(e) {
-  e.target.style.backgroundImage = e.target.dataset.newPreview;
+  let cell = e.currentTarget;
+  let thumb = e.currentTarget;
+  let thumbs = thumb.getElementsByClassName('newtab-thumbnail');
+  if (thumbs.length) {
+    thumb = thumbs[0];
+  }
+
+  thumb.style.backgroundImage = e.currentTarget.dataset.newPreview;
+  var titles = cell.getElementsByClassName("newtab-title");
+  console.log(e.currentTarget.tagName, e.currentTarget.className, titles, titles.length);
+  for (let i = 0; i < titles.length; ++i) {
+    titles[i].style.display = 'none';
+  }
+  e.preventDefault();
+  return true;
 }
 
 function mouseOutListener(e) {
-  e.target.style.backgroundImage = e.target.dataset.oldPreview;
+  let cell = e.currentTarget;
+  let thumb = e.currentTarget;
+  let thumbs = thumb.getElementsByClassName('newtab-thumbnail');
+  if (thumbs.length) {
+    thumb = thumbs[0];
+  }
+
+  thumb.style.backgroundImage = e.currentTarget.dataset.oldPreview;
+  var titles = cell.getElementsByClassName("newtab-title");
+  console.log(e.currentTarget.tagName, e.currentTarget.className, titles, titles.length);
+  for (let i = 0; i < titles.length; ++i) {
+    titles[i].style.display = 'block';
+  }
+  e.preventDefault();
+  return true;
 }
 
 function updateThumbnails() {
-  var thumbnails = window.document.getElementsByClassName('newtab-cell');
-  if (thumbnails.length === 0) {
+  var cells = window.document.getElementsByClassName('newtab-cell');
+  if (cells.length === 0) {
     setTimeout(updateThumbnails, 500);
     return;
   }
@@ -42,29 +70,32 @@ function updateThumbnails() {
     toggle.setAttribute("title", "Show the plain new tab page");
   }
 
-  for (let i = 0; i < thumbnails.length; ++i) {
-    let thumb = thumbnails[i];
+  for (let i = 0; i < cells.length; ++i) {
+    let cell = cells[i];
+    let thumb = cells[i];
     let thumbs = thumb.getElementsByClassName('newtab-thumbnail');
     if (thumbs.length) {
       thumb = thumbs[0];
     }
 
+    console.log(cell.tagName, cell.className, thumb.tagName, thumb.className);
+
     switch (self.options.showPref) {
     case 0:
     case 3:
       thumb.style.backgroundImage = thumb.dataset.oldPreview;
-      thumb.removeEventListener("mouseover", mouseOverListener);
-      thumb.removeEventListener("mouseout", mouseOutListener);
+      cell.removeEventListener("mouseover", mouseOverListener);
+      cell.removeEventListener("mouseout", mouseOutListener);
       break;
     case 1:
       thumb.style.backgroundImage = thumb.dataset.oldPreview;
-      thumb.addEventListener("mouseover", mouseOverListener);
-      thumb.addEventListener("mouseout", mouseOutListener);
+      cell.addEventListener("mouseover", mouseOverListener);
+      cell.addEventListener("mouseout", mouseOutListener);
       break;
     case 2:
       thumb.style.backgroundImage = thumb.dataset.newPreview;
-      thumb.removeEventListener("mouseover", mouseOverListener);
-      thumb.removeEventListener("mouseout", mouseOutListener);
+      cell.removeEventListener("mouseover", mouseOverListener);
+      cell.removeEventListener("mouseout", mouseOutListener);
       break;
     }
   }
@@ -82,19 +113,34 @@ function updateThumbnails() {
       break;
     }
   }
+  var titles = document.getElementsByClassName("newtab-title");
+  for (let i = 0; i < titles.length; ++i) {
+    let title = titles[i];
+    switch (self.options.showPref) {
+    case 0:
+    case 3:
+    case 1:
+      title.style.display = 'block';
+      break;
+    case 2:
+      title.style.display = 'none';
+      break;
+    }
+  }
 
 }
 
-function addThumbnails(thumbnails) {
-  if (thumbnails.length === 0) {
+function addThumbnails(cells) {
+  if (cells.length === 0) {
     setTimeout(function () {
       addThumbnails(window.document.getElementsByClassName('newtab-cell'));
     }, 1000);
     return;
   }
 
-  for (let i = 0; i < thumbnails.length; ++i) {
-    let thumb = thumbnails[i];
+  for (let i = 0; i < cells.length; ++i) {
+    let cell = cells[i];
+    let thumb = cells[i];
     let thumbs = thumb.getElementsByClassName('newtab-thumbnail');
     if (thumbs.length) {
       thumb = thumbs[0];
@@ -103,9 +149,9 @@ function addThumbnails(thumbnails) {
       thumb.style.backgroundRepeat = "no-repeat";
       thumb.style.backgroundClip = "paddingBox";
     }
-    thumb.dataset.newPreview = 'url("' + self.options.thumbs[i] + '")';
-    thumb.dataset.oldPreview = thumb.style.backgroundImage;
-    thumb.dataset.thumburl = self.options.thumbs[i];
+    cell.dataset.newPreview = 'url("' + self.options.thumbs[i] + '")';
+    cell.dataset.oldPreview = thumb.style.backgroundImage;
+    cell.dataset.thumburl = self.options.thumbs[i];
   }
   updateThumbnails();
 }
