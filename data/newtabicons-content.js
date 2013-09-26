@@ -51,6 +51,7 @@ function updateThumbnails() {
 
     switch (self.options.showPref) {
     case 0:
+    case 3:
       thumb.style.backgroundImage = thumb.dataset.oldPreview;
       thumb.removeEventListener("mouseover", mouseOverListener);
       thumb.removeEventListener("mouseout", mouseOutListener);
@@ -65,12 +66,23 @@ function updateThumbnails() {
       thumb.removeEventListener("mouseover", mouseOverListener);
       thumb.removeEventListener("mouseout", mouseOutListener);
       break;
-    case 3:
-      thumb.style.backgroundImage = thumb.dataset.oldPreview;
-      thumb.removeEventListener("mouseover", mouseOverListener);
-      thumb.removeEventListener("mouseout", mouseOutListener);
     }
   }
+  var controls = document.getElementsByClassName("newtab-control");
+  for (let i = 0; i < controls.length; ++i) {
+    let control = controls[i];
+    switch (self.options.showPref) {
+    case 0:
+    case 3:
+      control.style.display = 'block';
+      break;
+    case 1:
+    case 2:
+      control.style.display = 'none';
+      break;
+    }
+  }
+
 }
 
 function addThumbnails(thumbnails) {
