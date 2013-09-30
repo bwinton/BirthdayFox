@@ -22,10 +22,10 @@ function mouseOverListener(e) {
 
   thumb.style.backgroundImage = e.currentTarget.dataset.newPreview;
   var titles = cell.getElementsByClassName("newtab-title");
-  console.log(e.currentTarget.tagName, e.currentTarget.className, titles, titles.length);
   for (let i = 0; i < titles.length; ++i) {
     titles[i].style.display = 'none';
   }
+
   e.preventDefault();
   return true;
 }
@@ -40,10 +40,49 @@ function mouseOutListener(e) {
 
   thumb.style.backgroundImage = e.currentTarget.dataset.oldPreview;
   var titles = cell.getElementsByClassName("newtab-title");
-  console.log(e.currentTarget.tagName, e.currentTarget.className, titles, titles.length);
   for (let i = 0; i < titles.length; ++i) {
     titles[i].style.display = 'block';
   }
+
+  var overlays = cell.getElementsByClassName("newtab-overlay");
+  for (let i = 0; i < overlays.length; ++i) {
+    overlays[i].style.opacity = "0";
+  }
+
+  e.preventDefault();
+  return true;
+}
+
+
+function overlayListener(e) {
+  let cell = e.currentTarget;
+
+  var overlays = cell.getElementsByClassName("newtab-overlay");
+  for (let i = 0; i < overlays.length; ++i) {
+    switch (self.options.showPref) {
+    case 0:
+    case 1:
+    case 3:
+      overlays[i].style.opacity = "0";
+      break;
+    case 2:
+      overlays[i].style.opacity = "0.8";
+      break;
+    }
+  }
+
+  e.preventDefault();
+  return true;
+}
+
+function outlayListener(e) {
+  let cell = e.currentTarget;
+
+  var overlays = cell.getElementsByClassName("newtab-overlay");
+  for (let i = 0; i < overlays.length; ++i) {
+    overlays[i].style.opacity = "0";
+  }
+
   e.preventDefault();
   return true;
 }
@@ -78,24 +117,34 @@ function updateThumbnails() {
       thumb = thumbs[0];
     }
 
-    console.log(cell.tagName, cell.className, thumb.tagName, thumb.className);
+    let overlay = null;
+    let overlays = cell.getElementsByClassName('newtab-overlay');
+    if (overlays.length) {
+      overlay = overlays[0];
+    }
+
+    cell.addEventListener("mouseover", overlayListener);
+    cell.addEventListener("mouseout", outlayListener);
 
     switch (self.options.showPref) {
     case 0:
     case 3:
-      thumb.style.backgroundImage = thumb.dataset.oldPreview;
+      thumb.style.backgroundImage = cell.dataset.oldPreview;
       cell.removeEventListener("mouseover", mouseOverListener);
       cell.removeEventListener("mouseout", mouseOutListener);
+      overlay.style.zIndex = "-5";
       break;
     case 1:
-      thumb.style.backgroundImage = thumb.dataset.oldPreview;
       cell.addEventListener("mouseover", mouseOverListener);
       cell.addEventListener("mouseout", mouseOutListener);
+      thumb.style.backgroundImage = cell.dataset.oldPreview;
+      overlay.style.zIndex = "-5";
       break;
     case 2:
-      thumb.style.backgroundImage = thumb.dataset.newPreview;
+      thumb.style.backgroundImage = cell.dataset.newPreview;
       cell.removeEventListener("mouseover", mouseOverListener);
       cell.removeEventListener("mouseout", mouseOutListener);
+      overlay.style.zIndex = "5";
       break;
     }
   }
@@ -130,6 +179,32 @@ function updateThumbnails() {
 
 }
 
+
+var thumbRE = /([^,]*),(.*)/;
+
+function makeOverlay(node, text) {
+  var newDiv = document.createElement("div");
+  newDiv.className = "newtab-overlay";
+  var newContent = document.createTextNode(text);
+
+  newDiv.appendChild(newContent); //add the text node to the newly created div.
+  newDiv.style.opacity = "0";
+  newDiv.style.position = "absolute";
+  newDiv.style.background = "#333";
+  newDiv.style.color = "#eee";
+  newDiv.style.padding = "7px";
+  newDiv.style.left = "0px";
+  newDiv.style.top = "0px";
+  newDiv.style.right = "0px";
+  newDiv.style.bottom = "0px";
+  newDiv.style.transition = "opacity .5s";
+
+  // add the newly created element and its content into the DOM
+  node.appendChild(newDiv);
+  newDiv.addEventListener("mouseover", overlayListener);
+  newDiv.addEventListener("mouseout", outlayListener);
+}
+
 function addThumbnails(cells) {
   if (cells.length === 0) {
     setTimeout(function () {
@@ -149,9 +224,18 @@ function addThumbnails(cells) {
       thumb.style.backgroundRepeat = "no-repeat";
       thumb.style.backgroundClip = "paddingBox";
     }
-    cell.dataset.newPreview = 'url("' + self.options.thumbs[i] + '")';
+    let matches = thumbRE.exec(self.options.thumbs[i]);
+    if (!matches) {
+      matches = [null, self.options.thumbs[i], ""];
+    }
+    let url = matches[1].trim();
+    let overlay = matches[2].trim();
+
+    cell.dataset.newPreview = 'url("' + url + '")';
     cell.dataset.oldPreview = thumb.style.backgroundImage;
-    cell.dataset.thumburl = self.options.thumbs[i];
+    cell.dataset.thumburl = url;
+    cell.style.position = "relative";
+    makeOverlay(cell, overlay);
   }
   updateThumbnails();
 }
