@@ -21,6 +21,8 @@ function mouseOverListener(e) {
   }
 
   thumb.style.backgroundImage = e.currentTarget.dataset.newPreview;
+  thumb.style.backgroundSize = "auto";
+  thumb.style.backgroundPosition = "center";
   var titles = cell.getElementsByClassName("newtab-title");
   for (let i = 0; i < titles.length; ++i) {
     titles[i].style.display = 'none';
@@ -39,6 +41,9 @@ function mouseOutListener(e) {
   }
 
   thumb.style.backgroundImage = e.currentTarget.dataset.oldPreview;
+  thumb.style.backgroundSize = "cover";
+  thumb.style.backgroundPosition = "0% 0%";
+
   var titles = cell.getElementsByClassName("newtab-title");
   for (let i = 0; i < titles.length; ++i) {
     titles[i].style.display = 'block';
@@ -129,21 +134,27 @@ function updateThumbnails() {
     switch (self.options.showPref) {
     case 0:
     case 3:
-      thumb.style.backgroundImage = cell.dataset.oldPreview;
       cell.removeEventListener("mouseover", mouseOverListener);
       cell.removeEventListener("mouseout", mouseOutListener);
+      thumb.style.backgroundImage = cell.dataset.oldPreview;
+      thumb.style.backgroundSize = "cover";
+      thumb.style.backgroundPosition = "0% 0%";
       overlay.style.zIndex = "-5";
       break;
     case 1:
       cell.addEventListener("mouseover", mouseOverListener);
       cell.addEventListener("mouseout", mouseOutListener);
       thumb.style.backgroundImage = cell.dataset.oldPreview;
+      thumb.style.backgroundSize = "cover";
+      thumb.style.backgroundPosition = "0% 0%";
       overlay.style.zIndex = "-5";
       break;
     case 2:
-      thumb.style.backgroundImage = cell.dataset.newPreview;
       cell.removeEventListener("mouseover", mouseOverListener);
       cell.removeEventListener("mouseout", mouseOutListener);
+      thumb.style.backgroundImage = cell.dataset.newPreview;
+      thumb.style.backgroundSize = "auto";
+      thumb.style.backgroundPosition = "center";
       overlay.style.zIndex = "5";
       break;
     }
@@ -220,7 +231,8 @@ function addThumbnails(cells) {
     if (thumbs.length) {
       thumb = thumbs[0];
     } else {
-      thumb.style.backgroundSize = "cover";
+      thumb.style.backgroundSize = "auto";
+      thumb.style.backgroundPosition = "center";
       thumb.style.backgroundRepeat = "no-repeat";
       thumb.style.backgroundClip = "paddingBox";
     }
@@ -231,10 +243,11 @@ function addThumbnails(cells) {
     let url = matches[1].trim();
     let overlay = matches[2].trim();
 
+    cell.border = '#CDCFD1';
     cell.dataset.newPreview = 'url("' + url + '")';
     cell.dataset.oldPreview = thumb.style.backgroundImage;
     cell.dataset.thumburl = url;
-    cell.style.position = "relative";
+    cell.style.position = 'relative';
     makeOverlay(cell, overlay);
   }
   updateThumbnails();
