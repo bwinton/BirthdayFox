@@ -1,13 +1,6 @@
 {
   "preferences": [
     {
-      "name": "urlbar",
-      "title": "Urlbar placeholder",
-      "description": "Add whimsical sayings before you type in a url.",
-      "type": "bool",
-      "value": true
-    },
-    {
       "name": "newtabicons2",
       "title": "Newtab icons",
       "description": "Add better icons for the new tab page.",
