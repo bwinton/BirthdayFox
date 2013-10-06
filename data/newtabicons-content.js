@@ -8,75 +8,20 @@
   moz:true, esnext:false, indent:2, maxerr:50, devel:true, node:true, boss:true,
   globalstrict:true, nomen:false, newcap:false */
 
-/*global self:false, gAllPages:false */
+/*global self:false */
 
 "use strict";
 
-var header;
+var toggle;
 var undoContainer;
-
-function mouseOverListener(e) {
-  let cell = e.currentTarget;
-  let thumb = e.currentTarget;
-  let thumbs = thumb.getElementsByClassName('newtab-thumbnail');
-  if (thumbs.length) {
-    thumb = thumbs[0];
-  }
-
-  thumb.style.backgroundImage = e.currentTarget.dataset.newPreview;
-  thumb.style.backgroundSize = 'auto';
-  thumb.style.backgroundPosition = 'center';
-  var titles = cell.getElementsByClassName('newtab-title');
-  for (let i = 0; i < titles.length; ++i) {
-    titles[i].style.display = 'none';
-  }
-
-  e.preventDefault();
-  return true;
-}
-
-function mouseOutListener(e) {
-  let cell = e.currentTarget;
-  let thumb = e.currentTarget;
-  let thumbs = thumb.getElementsByClassName('newtab-thumbnail');
-  if (thumbs.length) {
-    thumb = thumbs[0];
-  }
-
-  thumb.style.backgroundImage = e.currentTarget.dataset.oldPreview;
-  thumb.style.backgroundSize = 'cover';
-  thumb.style.backgroundPosition = '0% 0%';
-
-  var titles = cell.getElementsByClassName('newtab-title');
-  for (let i = 0; i < titles.length; ++i) {
-    titles[i].style.display = 'block';
-  }
-
-  var overlays = cell.getElementsByClassName('newtab-overlay');
-  for (let i = 0; i < overlays.length; ++i) {
-    overlays[i].style.opacity = '0';
-  }
-
-  e.preventDefault();
-  return true;
-}
-
+var header;
 
 function overlayListener(e) {
   let cell = e.currentTarget;
 
   var overlays = cell.getElementsByClassName('newtab-overlay');
   for (let i = 0; i < overlays.length; ++i) {
-    switch (self.options.showPref) {
-    case 0:
-    case 1:
-    case 3:
-      overlays[i].style.opacity = '0';
-      break;
-    case 2:
-      overlays[i].style.opacity = '0.8';
-      break;
-    }
+    overlays[i].style.opacity = (self.options.showPref ? '0.8' : '0');
   }
 
   e.preventDefault();
@@ -102,26 +47,15 @@ function updateThumbnails() {
     return;
   }
 
-  var toggle = document.getElementById('newtab-toggle');
-  switch (self.options.showPref) {
-  case 0:
-    toggle.setAttribute('title', 'Show whimsical thumbnails on hover');
-    undoContainer.style.display = '';
-    header.style.display = 'none';
-    break;
-  case 1:
-    toggle.setAttribute('title', 'Always show whimsical thumbnails');
-    undoContainer.style.display = 'none';
-    header.style.display = '';
-    break;
-  case 2:
-    toggle.setAttribute('title', 'Hide the new tab page');
-    undoContainer.style.display = 'none';
-    header.style.display = '';
-    break;
-  case 3:
+  if (self.options.showPref) {
     toggle.setAttribute('title', 'Show the plain new tab page');
+    toggle.innerHTML = '🎂';
     undoContainer.style.display = 'none';
+    header.style.display = '';
+  } else {
+    toggle.setAttribute('title', 'Show whimsical thumbnails on hover');
+    toggle.innerHTML = '🍰';
+    undoContainer.style.display = '';
     header.style.display = 'none';
   }
 
@@ -142,61 +76,27 @@ function updateThumbnails() {
     cell.addEventListener('mouseover', overlayListener);
     cell.addEventListener('mouseout', outlayListener);
 
-    switch (self.options.showPref) {
-    case 0:
-    case 3:
-      cell.removeEventListener('mouseover', mouseOverListener);
-      cell.removeEventListener('mouseout', mouseOutListener);
-      thumb.style.backgroundImage = cell.dataset.oldPreview;
-      thumb.style.backgroundSize = 'cover';
-      thumb.style.backgroundPosition = '0% 0%';
-      overlay.style.zIndex = '-5';
-      break;
-    case 1:
-      cell.addEventListener('mouseover', mouseOverListener);
-      cell.addEventListener('mouseout', mouseOutListener);
-      thumb.style.backgroundImage = cell.dataset.oldPreview;
-      thumb.style.backgroundSize = 'cover';
-      thumb.style.backgroundPosition = '0% 0%';
-      overlay.style.zIndex = '-5';
-      break;
-    case 2:
-      cell.removeEventListener('mouseover', mouseOverListener);
-      cell.removeEventListener('mouseout', mouseOutListener);
+    if (self.options.showPref) {
       thumb.style.backgroundImage = cell.dataset.newPreview;
       thumb.style.backgroundSize = 'auto';
       thumb.style.backgroundPosition = 'center';
       overlay.style.zIndex = '5';
-      break;
+    } else {
+      thumb.style.backgroundImage = cell.dataset.oldPreview;
+      thumb.style.backgroundSize = 'cover';
+      thumb.style.backgroundPosition = '0% 0%';
+      overlay.style.zIndex = '-5';
     }
   }
   var controls = document.getElementsByClassName('newtab-control');
   for (let i = 0; i < controls.length; ++i) {
     let control = controls[i];
-    switch (self.options.showPref) {
-    case 0:
-    case 3:
-      control.style.display = 'block';
-      break;
-    case 1:
-    case 2:
-      control.style.display = 'none';
-      break;
-    }
+    control.style.display = (self.options.showPref ? 'none' : 'block');
   }
   var titles = document.getElementsByClassName('newtab-title');
   for (let i = 0; i < titles.length; ++i) {
     let title = titles[i];
-    switch (self.options.showPref) {
-    case 0:
-    case 3:
-    case 1:
-      title.style.display = 'block';
-      break;
-    case 2:
-      title.style.display = 'none';
-      break;
-    }
+    title.style.display = (self.options.showPref ? 'none' : 'block');
   }
 
 }
@@ -265,24 +165,34 @@ function addThumbnails(cells) {
 }
 
 function oneTimeInitialization() {
-  // Tell the add-on when the toggle is clicked…
-  var toggle = document.getElementById('newtab-toggle');
-  toggle.onclick = function () {
-    self.port.emit('toggle clicked', {});
-  };
-  // And eventually it'll tell us what the new value of the pref is…
-  self.port.on('showPrefUpdated', function (e) {
-    self.options.showPref = e;
-    gAllPages.enabled = self.options.showPref !== 3;
-    updateThumbnails();
-  });
-
   undoContainer = document.getElementById('newtab-undo-container');
   header = document.createElement('div');
   header.innerHTML = self.options.header;
   header.style.font = '25px/1.8 "Lucida Grande", sans-serif';
   var top = document.getElementById('newtab-margin-top');
   top.appendChild(header);
+
+  toggle = document.createElement('div');
+  toggle.innerHTML = '🎂';
+  toggle.style.font = '16px/1 "Lucida Grande", sans-serif';
+  toggle.style.width = '16px';
+  toggle.style.height = '16px';
+  toggle.style.position = 'absolute';
+  toggle.style.right = '14px';
+  toggle.style.top = '36px';
+
+  // Tell the add-on when the toggle is clicked…
+  toggle.onclick = function () {
+    self.port.emit('toggle clicked', {});
+  };
+  // And eventually it'll tell us what the new value of the pref is…
+  self.port.on('showPrefUpdated', function (e) {
+    self.options.showPref = e;
+    updateThumbnails();
+  });
+
+  document.getElementById('newtab-scrollbox').appendChild(toggle);
+
 }
 
 oneTimeInitialization();

@@ -1,29 +1,11 @@
 {
   "preferences": [
     {
-      "name": "newtabicons2",
+      "name": "newtabicons",
       "title": "Newtab icons",
-      "description": "Add better icons for the new tab page.",
-      "type": "menulist",
-      "value": 2,
-      "options": [
-        {
-          "value": "0",
-          "label": "Off"
-        },
-        {
-          "value": "1",
-          "label": "Hover to Show"
-        },
-        {
-          "value": "2",
-          "label": "Always On"
-        },
-        {
-          "value": "3",
-          "label": "Don’t show thumbnails at all"
-        }
-      ]
+      "description": "Show birthday thumbnails on the new tab page.",
+      "type": "bool",
+      "value": true
     }
   ],
   "permissions": {
@@ -37,7 +19,7 @@
   "bugs": {},
   "amd": {},
   "repository": {},
-  "version": "0.11",
+  "version": "0.12",
   "contributors": [],
   "fullName": "BirthdayFox",
   "id": "birthdayfox",
