@@ -24,9 +24,9 @@ function mouseOverListener(e) {
   }
 
   thumb.style.backgroundImage = e.currentTarget.dataset.newPreview;
-  thumb.style.backgroundSize = "auto";
-  thumb.style.backgroundPosition = "center";
-  var titles = cell.getElementsByClassName("newtab-title");
+  thumb.style.backgroundSize = 'auto';
+  thumb.style.backgroundPosition = 'center';
+  var titles = cell.getElementsByClassName('newtab-title');
   for (let i = 0; i < titles.length; ++i) {
     titles[i].style.display = 'none';
   }
@@ -44,17 +44,17 @@ function mouseOutListener(e) {
   }
 
   thumb.style.backgroundImage = e.currentTarget.dataset.oldPreview;
-  thumb.style.backgroundSize = "cover";
-  thumb.style.backgroundPosition = "0% 0%";
+  thumb.style.backgroundSize = 'cover';
+  thumb.style.backgroundPosition = '0% 0%';
 
-  var titles = cell.getElementsByClassName("newtab-title");
+  var titles = cell.getElementsByClassName('newtab-title');
   for (let i = 0; i < titles.length; ++i) {
     titles[i].style.display = 'block';
   }
 
-  var overlays = cell.getElementsByClassName("newtab-overlay");
+  var overlays = cell.getElementsByClassName('newtab-overlay');
   for (let i = 0; i < overlays.length; ++i) {
-    overlays[i].style.opacity = "0";
+    overlays[i].style.opacity = '0';
   }
 
   e.preventDefault();
@@ -65,16 +65,16 @@ function mouseOutListener(e) {
 function overlayListener(e) {
   let cell = e.currentTarget;
 
-  var overlays = cell.getElementsByClassName("newtab-overlay");
+  var overlays = cell.getElementsByClassName('newtab-overlay');
   for (let i = 0; i < overlays.length; ++i) {
     switch (self.options.showPref) {
     case 0:
     case 1:
     case 3:
-      overlays[i].style.opacity = "0";
+      overlays[i].style.opacity = '0';
       break;
     case 2:
-      overlays[i].style.opacity = "0.8";
+      overlays[i].style.opacity = '0.8';
       break;
     }
   }
@@ -86,9 +86,9 @@ function overlayListener(e) {
 function outlayListener(e) {
   let cell = e.currentTarget;
 
-  var overlays = cell.getElementsByClassName("newtab-overlay");
+  var overlays = cell.getElementsByClassName('newtab-overlay');
   for (let i = 0; i < overlays.length; ++i) {
-    overlays[i].style.opacity = "0";
+    overlays[i].style.opacity = '0';
   }
 
   e.preventDefault();
@@ -102,25 +102,25 @@ function updateThumbnails() {
     return;
   }
 
-  var toggle = document.getElementById("newtab-toggle");
+  var toggle = document.getElementById('newtab-toggle');
   switch (self.options.showPref) {
   case 0:
-    toggle.setAttribute("title", "Show whimsical thumbnails on hover");
+    toggle.setAttribute('title', 'Show whimsical thumbnails on hover');
     undoContainer.style.display = '';
     header.style.display = 'none';
     break;
   case 1:
-    toggle.setAttribute("title", "Always show whimsical thumbnails");
+    toggle.setAttribute('title', 'Always show whimsical thumbnails');
     undoContainer.style.display = 'none';
     header.style.display = '';
     break;
   case 2:
-    toggle.setAttribute("title", "Hide the new tab page");
+    toggle.setAttribute('title', 'Hide the new tab page');
     undoContainer.style.display = 'none';
     header.style.display = '';
     break;
   case 3:
-    toggle.setAttribute("title", "Show the plain new tab page");
+    toggle.setAttribute('title', 'Show the plain new tab page');
     undoContainer.style.display = 'none';
     header.style.display = 'none';
   }
@@ -139,38 +139,38 @@ function updateThumbnails() {
       overlay = overlays[0];
     }
 
-    cell.addEventListener("mouseover", overlayListener);
-    cell.addEventListener("mouseout", outlayListener);
+    cell.addEventListener('mouseover', overlayListener);
+    cell.addEventListener('mouseout', outlayListener);
 
     switch (self.options.showPref) {
     case 0:
     case 3:
-      cell.removeEventListener("mouseover", mouseOverListener);
-      cell.removeEventListener("mouseout", mouseOutListener);
+      cell.removeEventListener('mouseover', mouseOverListener);
+      cell.removeEventListener('mouseout', mouseOutListener);
       thumb.style.backgroundImage = cell.dataset.oldPreview;
-      thumb.style.backgroundSize = "cover";
-      thumb.style.backgroundPosition = "0% 0%";
-      overlay.style.zIndex = "-5";
+      thumb.style.backgroundSize = 'cover';
+      thumb.style.backgroundPosition = '0% 0%';
+      overlay.style.zIndex = '-5';
       break;
     case 1:
-      cell.addEventListener("mouseover", mouseOverListener);
-      cell.addEventListener("mouseout", mouseOutListener);
+      cell.addEventListener('mouseover', mouseOverListener);
+      cell.addEventListener('mouseout', mouseOutListener);
       thumb.style.backgroundImage = cell.dataset.oldPreview;
-      thumb.style.backgroundSize = "cover";
-      thumb.style.backgroundPosition = "0% 0%";
-      overlay.style.zIndex = "-5";
+      thumb.style.backgroundSize = 'cover';
+      thumb.style.backgroundPosition = '0% 0%';
+      overlay.style.zIndex = '-5';
       break;
     case 2:
-      cell.removeEventListener("mouseover", mouseOverListener);
-      cell.removeEventListener("mouseout", mouseOutListener);
+      cell.removeEventListener('mouseover', mouseOverListener);
+      cell.removeEventListener('mouseout', mouseOutListener);
       thumb.style.backgroundImage = cell.dataset.newPreview;
-      thumb.style.backgroundSize = "auto";
-      thumb.style.backgroundPosition = "center";
-      overlay.style.zIndex = "5";
+      thumb.style.backgroundSize = 'auto';
+      thumb.style.backgroundPosition = 'center';
+      overlay.style.zIndex = '5';
       break;
     }
   }
-  var controls = document.getElementsByClassName("newtab-control");
+  var controls = document.getElementsByClassName('newtab-control');
   for (let i = 0; i < controls.length; ++i) {
     let control = controls[i];
     switch (self.options.showPref) {
@@ -184,7 +184,7 @@ function updateThumbnails() {
       break;
     }
   }
-  var titles = document.getElementsByClassName("newtab-title");
+  var titles = document.getElementsByClassName('newtab-title');
   for (let i = 0; i < titles.length; ++i) {
     let title = titles[i];
     switch (self.options.showPref) {
@@ -205,26 +205,26 @@ function updateThumbnails() {
 var thumbRE = /([^,]*),(.*)/;
 
 function makeOverlay(node, text) {
-  var newDiv = document.createElement("div");
-  newDiv.className = "newtab-overlay";
+  var newDiv = document.createElement('div');
+  newDiv.className = 'newtab-overlay';
   var newContent = document.createTextNode(text);
 
   newDiv.appendChild(newContent); //add the text node to the newly created div.
-  newDiv.style.opacity = "0";
-  newDiv.style.position = "absolute";
-  newDiv.style.background = "#333";
-  newDiv.style.color = "#eee";
-  newDiv.style.padding = "7px";
-  newDiv.style.left = "0px";
-  newDiv.style.top = "0px";
-  newDiv.style.right = "0px";
-  newDiv.style.bottom = "0px";
-  newDiv.style.transition = "opacity .5s";
+  newDiv.style.opacity = '0';
+  newDiv.style.position = 'absolute';
+  newDiv.style.background = '#333';
+  newDiv.style.color = '#eee';
+  newDiv.style.padding = '7px';
+  newDiv.style.left = '0px';
+  newDiv.style.top = '0px';
+  newDiv.style.right = '0px';
+  newDiv.style.bottom = '0px';
+  newDiv.style.transition = 'opacity .5s';
 
   // add the newly created element and its content into the DOM
   node.appendChild(newDiv);
-  newDiv.addEventListener("mouseover", overlayListener);
-  newDiv.addEventListener("mouseout", outlayListener);
+  newDiv.addEventListener('mouseover', overlayListener);
+  newDiv.addEventListener('mouseout', outlayListener);
 }
 
 function addThumbnails(cells) {
@@ -242,14 +242,14 @@ function addThumbnails(cells) {
     if (thumbs.length) {
       thumb = thumbs[0];
     } else {
-      thumb.style.backgroundSize = "auto";
-      thumb.style.backgroundPosition = "center";
-      thumb.style.backgroundRepeat = "no-repeat";
-      thumb.style.backgroundClip = "paddingBox";
+      thumb.style.backgroundSize = 'auto';
+      thumb.style.backgroundPosition = 'center';
+      thumb.style.backgroundRepeat = 'no-repeat';
+      thumb.style.backgroundClip = 'paddingBox';
     }
     let matches = thumbRE.exec(self.options.thumbs[i]);
     if (!matches) {
-      matches = [null, self.options.thumbs[i], ""];
+      matches = [null, self.options.thumbs[i], ''];
     }
     let url = matches[1].trim();
     let overlay = matches[2].trim();
@@ -266,7 +266,7 @@ function addThumbnails(cells) {
 
 function oneTimeInitialization() {
   // Tell the add-on when the toggle is clicked…
-  var toggle = document.getElementById("newtab-toggle");
+  var toggle = document.getElementById('newtab-toggle');
   toggle.onclick = function () {
     self.port.emit('toggle clicked', {});
   };
