@@ -12,6 +12,9 @@
 
 "use strict";
 
+var header;
+var undoContainer;
+
 function mouseOverListener(e) {
   let cell = e.currentTarget;
   let thumb = e.currentTarget;
@@ -103,15 +106,23 @@ function updateThumbnails() {
   switch (self.options.showPref) {
   case 0:
     toggle.setAttribute("title", "Show whimsical thumbnails on hover");
+    undoContainer.style.display = '';
+    header.style.display = 'none';
     break;
   case 1:
     toggle.setAttribute("title", "Always show whimsical thumbnails");
+    undoContainer.style.display = 'none';
+    header.style.display = '';
     break;
   case 2:
     toggle.setAttribute("title", "Hide the new tab page");
+    undoContainer.style.display = 'none';
+    header.style.display = '';
     break;
   case 3:
     toggle.setAttribute("title", "Show the plain new tab page");
+    undoContainer.style.display = 'none';
+    header.style.display = 'none';
   }
 
   for (let i = 0; i < cells.length; ++i) {
@@ -253,7 +264,7 @@ function addThumbnails(cells) {
   updateThumbnails();
 }
 
-function overrideToggle() {
+function oneTimeInitialization() {
   // Tell the add-on when the toggle is clicked…
   var toggle = document.getElementById("newtab-toggle");
   toggle.onclick = function () {
@@ -265,7 +276,14 @@ function overrideToggle() {
     gAllPages.enabled = self.options.showPref !== 3;
     updateThumbnails();
   });
+
+  undoContainer = document.getElementById('newtab-undo-container');
+  header = document.createElement('div');
+  header.innerHTML = self.options.header;
+  header.style.font = '25px/1.8 "Lucida Grande", sans-serif';
+  var top = document.getElementById('newtab-margin-top');
+  top.appendChild(header);
 }
 
+oneTimeInitialization();
 addThumbnails(window.document.getElementsByClassName('newtab-cell'));
-overrideToggle();
